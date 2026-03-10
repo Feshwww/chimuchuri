@@ -2,29 +2,51 @@ using UnityEngine;
 
 public class Moviment : MonoBehaviour
 {
-    int numero = 1;
+    [SerializeField] private CharacterController characterController;
+    private float moveSpeed = 20;
+    private const float GRAVITY = -9.8f;
+    public Vector3 forceApplied;
+
     void Start()
     {
-        
+
     }
 
-    
+
     void Update()
     {
+        Vector3 inputDir = Vector3.zero;
+        CalculateGravity();
         if (Input.GetKey("d"))
         {
-            transform.Translate(0.05f, 0, 0);
+            inputDir.x = 1;
         }
-        if (Input.GetKey("a"))
+        else if (Input.GetKey("a"))
         {
-            transform.Translate(-0.05f, 0, 0);
+            inputDir.x = -1;
+        }
+        else
+        {
+            inputDir.x = 0;
+        }
+        if (Input.GetKey("space"))
+        {
+
 
         }
-        if (Input.GetKey("w"))
+        float multiplier = Time.deltaTime * moveSpeed;
+        characterController.Move((inputDir + forceApplied) * multiplier);
+    }
+    public void CalculateGravity()
+    {
+        bool isGrounded = Physics.Raycast(transform.position, Vector3.down, 1);
+        if (isGrounded)
         {
-            transform.Translate(0, 0.05f, 0);
-
+            forceApplied.y = -2f;
         }
-        Physics.CheckSphere(transform.position, 1f);
+        else
+        {
+            forceApplied.y += GRAVITY;
+        }
     }
 }
