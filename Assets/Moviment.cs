@@ -16,7 +16,7 @@ public class Moviment : MonoBehaviour
     void Update()
     {
         Vector3 inputDir = Vector3.zero;
-        CalculateGravity();
+        
         if (Input.GetKey("d"))
         {
             inputDir.x = 1;
@@ -31,10 +31,15 @@ public class Moviment : MonoBehaviour
         }
         if (Input.GetKey("space"))
         {
-
+            inputDir.y = 4;
 
         }
-        float multiplier = Time.deltaTime * moveSpeed;
+        else
+        {
+            inputDir.y = 0;
+            CalculateGravity();
+        }
+            float multiplier = Time.deltaTime * moveSpeed;
         characterController.Move((inputDir + forceApplied) * multiplier);
     }
     public void CalculateGravity()
